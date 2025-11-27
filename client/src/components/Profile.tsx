@@ -7,22 +7,49 @@ import { Button } from './ui/button'
 
 export default function Profile() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  // const [profileData, setProfileData] = useState<string>({
-  //   fullname: "",
-  //   email: "",
-  //   address: "",
-
-  // })
+  const [profileData, setProfileData] = useState({
+    fullname: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    country: '',
+    profilePicture: ''
+  })
   const imageRef = useRef<HTMLInputElement>(null)
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState<string>('')
+  const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result as string
+        setSelectedProfilePicture(result)
+        setProfileData((prevData) => ({
+          ...prevData,
+          profilePicture: result
+        }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setProfileData({ ...profileData, [name]: value })
+  }
+  const updateProfileHandler = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log(profileData)
+  }
   return (
     <form className='max-w-7xl mx-auto my-5'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-2'>
           <Avatar className='relative md:w-28 md:h-28 w-20 h-20'>
-            <AvatarImage />
+            <AvatarImage src={selectedProfilePicture} />
             <AvatarFallback>CN</AvatarFallback>
 
-            <input type='file' className='hidden' accept='image/' ref={imageRef} />
+            <input type='file' className='hidden' accept='image/' ref={imageRef} onChange={fileChangeHandler} />
             <div
               onClick={() => imageRef.current?.click()}
               className='absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50 rounded-full cursor-pointer'
@@ -33,8 +60,8 @@ export default function Profile() {
           <Input
             type='text'
             name='fullname'
-            // value={profileData.fullname}
-            // onChange={changeHandler}
+            value={profileData.fullname}
+            onChange={changeHandler}
             className='font-bold text-2xl outline-none border-none focus-visible:ring-transparent'
           />
         </div>
@@ -47,8 +74,8 @@ export default function Profile() {
             <input
               // disabled
               name='email'
-              // value={profileData.email}
-              // onChange={changeHandler}
+              onChange={changeHandler}
+              value={profileData.email}
               className='w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none'
             />
           </div>
@@ -59,8 +86,8 @@ export default function Profile() {
             <Label>Address</Label>
             <input
               name='address'
-              // value={profileData.address}
-              // onChange={changeHandler}
+              value={profileData.address}
+              onChange={changeHandler}
               className='w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none'
             />
           </div>
@@ -71,8 +98,8 @@ export default function Profile() {
             <Label>City</Label>
             <input
               name='city'
-              // value={profileData.city}
-              // onChange={changeHandler}
+              value={profileData.city}
+              onChange={changeHandler}
               className='w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none'
             />
           </div>
@@ -83,8 +110,8 @@ export default function Profile() {
             <Label>Country</Label>
             <input
               name='country'
-              // value={profileData.country}
-              // onChange={changeHandler}
+              value={profileData.country}
+              onChange={changeHandler}
               className='w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none'
             />
           </div>
@@ -97,7 +124,7 @@ export default function Profile() {
             Please wait
           </Button>
         ) : (
-          <Button type='submit' className='bg-orange hover:bg-hoverOrange'>
+          <Button type='submit' className='bg-orange hover:bg-hoverOrange' onClick={updateProfileHandler}>
             Update
           </Button>
         )}
