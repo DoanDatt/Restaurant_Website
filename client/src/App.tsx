@@ -9,6 +9,7 @@ import MainLayout from './layout/MainLayout'
 import Profile from './components/Profile'
 import SearchPage from './components/SearchPage'
 import HereSection from './components/HeroSection'
+import RestaurantDetail from './components/RestaurantDetail'
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -16,6 +17,10 @@ function App() {
       path: '/',
       element: <MainLayout />,
       children: [
+        {
+          path: '/resutaurant/:id',
+          element: <RestaurantDetail />
+        },
         {
           path: '/',
           element: <HereSection />
