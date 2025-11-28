@@ -10,6 +10,7 @@ import Profile from './components/Profile'
 import SearchPage from './components/SearchPage'
 import HereSection from './components/HeroSection'
 import RestaurantDetail from './components/RestaurantDetail'
+import Cart from './components/Cart'
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -20,6 +21,10 @@ function App() {
         {
           path: '/resutaurant/:id',
           element: <RestaurantDetail />
+        },
+        {
+          path: '/cart',
+          element: <Cart />
         },
         {
           path: '/',
