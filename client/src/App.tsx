@@ -12,6 +12,7 @@ import HereSection from './components/HeroSection'
 import RestaurantDetail from './components/RestaurantDetail'
 import Cart from './components/Cart'
 import Restaurant from './admin/Restaurant'
+import AddMenu from './admin/AddMenu'
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -20,11 +21,15 @@ function App() {
       element: <MainLayout />,
       children: [
         {
+          path: '/admin/menu',
+          element: <AddMenu />
+        },
+        {
           path: '/admin/restaurant',
           element: <Restaurant />
         },
         {
-          path: '/resutaurant/:id',
+          path: '/restaurant/:id',
           element: <RestaurantDetail />
         },
         {
