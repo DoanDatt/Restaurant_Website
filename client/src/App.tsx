@@ -13,6 +13,7 @@ import RestaurantDetail from './components/RestaurantDetail'
 import Cart from './components/Cart'
 import Restaurant from './admin/Restaurant'
 import AddMenu from './admin/AddMenu'
+import Order from './admin/Order'
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -23,6 +24,10 @@ function App() {
         {
           path: '/admin/menu',
           element: <AddMenu />
+        },
+        {
+          path: '/admin/orders',
+          element: <Order />
         },
         {
           path: '/admin/restaurant',
