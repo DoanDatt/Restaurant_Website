@@ -11,7 +11,7 @@ export interface IUser {
   profilePicture: string;
   admin: boolean;
   lastLogin?: Date;
-  isVerified?: boolean;
+  isVerified: boolean;
   resetPasswordToken?: string;
   resetPasswordTokenExpiresAt?: Date;
   verificationToken?: string;
