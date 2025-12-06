@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import cloudinary from "../utils/cloudinary";
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -212,6 +213,26 @@ export const checkAuth = async (req: Request, res: Response) => {
 export const updateProfile = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).id;
+    const { fullname, profilePicture, email, address, city, country } =
+      req.body;
+    let cloudResponse: any;
+    cloudResponse = await cloudinary.uploader.upload(profilePicture);
+    const updateData = {
+      fullname,
+      profilePicture,
+      email,
+      address,
+      city,
+      country,
+    };
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-password");
+    return res.status(200).json({
+      success: true,
+      message: "Update profile successfully!",
+      user,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
