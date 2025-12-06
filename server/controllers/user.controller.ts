@@ -191,7 +191,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
 export const checkAuth = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).id;
+    const userId = req.id;
     const user = User.findById({ userId }).select("-password");
     if (!user) {
       return res.status(404).json({
