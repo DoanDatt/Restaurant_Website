@@ -4,6 +4,12 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import cloudinary from "../utils/cloudinary";
 import { generateToken } from "../utils/generateToken";
+import {
+  sendPasswordResetEmail,
+  sendResetSuccessEmail,
+  sendVerificationEmail,
+  sendWelcomeEmail,
+} from "../mailtrap/email";
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -27,7 +33,7 @@ export const signup = async (req: Request, res: Response) => {
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
     generateToken(res, user);
-    // await sendVerificationEmail(email, verificationToken)
+    await sendVerificationEmail(email, verificationToken);
 
     // trả về email với password nhưng không hiện password
     const userWithoutPassword = await User.findOne({ email }).select(
@@ -101,7 +107,7 @@ export const verifyEmail = async (res: Response, req: Request) => {
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
     await user.save();
-    // await sendEmailWelcome({user.email, user.password})
+    await sendWelcomeEmail(user.email, user.fullname);
     return res.status(200).json({
       success: true,
       message: "Email verified successfully",
@@ -145,10 +151,10 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const resetPasswordTokenExpiresAt = resetTokenExpiresAt;
     await user.save;
     // send email
-    // await sendPasswordResetEmail(
-    //   user.email,
-    //   `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`
-    // );
+    await sendPasswordResetEmail(
+      user.email,
+      `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`
+    );
     return res.status(200).json({
       success: true,
       message: "Password reset link sent to your email!",
@@ -180,7 +186,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     user.resetPasswordTokenExpiresAt = undefined;
     await user.save();
     // send success reset password
-    // await sendResetSuccessEmail(user.email)
+    await sendResetSuccessEmail(user.email);
     return res.status(200).json({
       success: true,
       message: "Password reset successfully",
