@@ -3,6 +3,7 @@ import { User } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import cloudinary from "../utils/cloudinary";
+import { generateToken } from "../utils/generateToken";
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -25,7 +26,7 @@ export const signup = async (req: Request, res: Response) => {
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
-    // generateToken(res, user)
+    generateToken(res, user);
     // await sendVerificationEmail(email, verificationToken)
 
     // trả về email với password nhưng không hiện password
@@ -62,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
         message: "Incorret email or password",
       });
     }
-    // generateToken(res, user)
+    generateToken(res, user);
     user.lastLogin = new Date();
     await user.save();
 
