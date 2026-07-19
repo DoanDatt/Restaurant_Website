@@ -33,10 +33,9 @@ const authApiRequest = {
         },
       }
     ),
-  logout: (body: { refreshToken: string }, signal?: AbortSignal | undefined) =>
+  logout: (body: { refreshToken: string }) =>
     http.post<MessageResType>("/api/auth/logout", body, {
       baseUrl: "",
-      signal,
     }),
   changePassword: (body: ChangePasswordBodyType) =>
     http.put<ChangePasswordBodyType>("/account/change-password", body),

@@ -17,8 +17,12 @@ import {
 import { Controller, useForm } from "react-hook-form"
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useLoginMutation } from "@/queries/useAuth"
+import { toast } from "sonner"
+import { handleErrorApi } from "@/lib/utils"
 
 export default function LoginForm() {
+  const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
@@ -27,9 +31,21 @@ export default function LoginForm() {
     },
   })
 
-  const onSubmit = (values: LoginBodyType) => {
-    // TODO: gọi API đăng nhập
-    console.log(values)
+  async function onSubmit(values: LoginBodyType) {
+    if (loginMutation.isPending) return
+    try {
+      const result = await loginMutation.mutateAsync(values)
+      // khi dùng mutateAsync thì bắt buộc phải dùng try catch để bắt lỗi, nếu không sẽ bị lỗi unhandled promise rejection
+      // mutateAsync được dùng khi muốn chờ kết quả trả về từ server, còn mutate thì không chờ kết quả trả về
+      toast("Login Success", {
+        description: result.payload.message,
+      })
+    } catch (error) {
+      handleErrorApi({
+        error,
+        setError: form.setError,
+      })
+    }
   }
 
   return (

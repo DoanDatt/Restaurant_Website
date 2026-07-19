@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
+import { Toaster } from "sonner"
+import AppProvider from "@/components/app-provider"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -28,14 +30,17 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <AppProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </AppProvider>
       </body>
     </html>
   )
