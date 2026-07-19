@@ -29,10 +29,14 @@ export const handleErrorApi = ({
     })
   } else {
     toast("Lỗi", {
-      // title: 'Lỗi',
       description: error?.payload?.message ?? "Lỗi không xác định",
-      // variant: 'destructive',
       duration: duration ?? 5000,
     })
   }
 }
+
+export const getAccessTokenFromLocalStorage = () =>
+  localStorage.getItem("accessToken")
+
+export const getRefreshTokenFromLocalStorage = () =>
+  localStorage.getItem("refreshToken")
