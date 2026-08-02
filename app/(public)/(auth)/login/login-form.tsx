@@ -20,8 +20,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useLoginMutation } from "@/queries/useAuth"
 import { toast } from "sonner"
 import { handleErrorApi } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 export default function LoginForm() {
+  const router = useRouter()
   const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -40,6 +42,8 @@ export default function LoginForm() {
       toast("Login Success", {
         description: result.payload.message,
       })
+      router.push("/manage/dashboard")
+      router.refresh()
     } catch (error) {
       handleErrorApi({
         error,
